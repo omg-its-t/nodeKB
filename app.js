@@ -1,11 +1,24 @@
+//modules to bring in
 const express = require('express');
+const path = require('path');
 
+//init app
 const app = express();
 
+//load pug view engine
+//                      current dir    file name
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
+
+
 app.get('/', function(req, res){
-  res.send('hello world');
+  res.render('index', {
+    title: "Hello"
+  });
 })
 
+
+//server start
 app.listen(3000, function(){
   console.log('Server running, ready for take off sir.');
 });
