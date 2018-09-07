@@ -1,0 +1,14 @@
+{
+  "name": "nodekb",
+  "version": "1.0.0",
+  "description": "knowledge base app",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app"
+  },
+  "author": "Theo Mellske",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}
