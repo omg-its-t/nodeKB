@@ -2,6 +2,7 @@
 const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser');
 
 //using useNewUrlParser to avoid deprecation warning
 mongoose.connect('mongodb://localhost/nodekb', { useNewUrlParser: true });
@@ -28,6 +29,20 @@ let Article = require('./models/article');
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'pug');
 
+//body-parser middleware
+app.use(bodyParser.urlencoded({ extended: false }));
+
+// parse application/json
+app.use(bodyParser.json());
+
+//error route
+app.get('/error', function(req, res){
+  res.render('error_page',{
+    //todo: figure out passing error output var to the error page
+    //error: err
+  });
+});
+
 //home route
 app.get('/', function(req, res){
   //db query to get all articles
@@ -51,6 +66,23 @@ app.get('/articles/add', function(req, res){
   });
 });
 
+//submit POST route
+app.post('/articles/add', function(req, res){
+  //using the model we brought in (line 24)
+  let article = new Article();
+  article.title = req.body.title;
+  article.author = req.body.author;
+  article.body = req.body.body;
+
+  article.save(function(err){
+    if(err){
+      res.redirect('/error',{
+      });
+    }else{
+      res.redirect('/');
+    }
+  });
+});
 
 //server start
 app.listen(3000, function(){
