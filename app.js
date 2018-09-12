@@ -32,6 +32,9 @@ app.set('view engine', 'pug');
 //body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
 
+//set public folder
+app.use(express.static(path.join(__dirname, 'public')));
+
 // parse application/json
 app.use(bodyParser.json());
 

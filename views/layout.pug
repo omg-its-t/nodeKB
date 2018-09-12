@@ -2,9 +2,18 @@ doctype html
 html
   head
     title NodeKnowledgeBase
+    link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
   body
-    block content
-    br
-    hr
-    footer
-      p Copyright &copy 2018
+    ul.nav.navbar.justify-content-end
+      li.nav-item
+        a.nav-link.active(href='#') Active
+      li.nav-item
+        a.nav-link(href='#') Link
+      li.nav-item
+        a.nav-link(href='#') Link
+    .container
+      block content
+      br
+      hr
+      footer
+        p Copyright &copy 2018
