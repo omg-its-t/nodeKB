@@ -87,6 +87,15 @@ app.post('/articles/add', function(req, res){
   });
 });
 
+//get single article
+app.get('/article/:id', function(req, res){
+  Article.findById(req.params.id, function(err, article){
+    res.render('article',{
+      article:article
+    });
+  });
+});
+
 //server start
 app.listen(3000, function(){
   console.log('Server running, ready for take off sir.');
