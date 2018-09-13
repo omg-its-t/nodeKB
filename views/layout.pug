@@ -4,16 +4,23 @@ html
     title NodeKnowledgeBase
     link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
   body
-    ul.nav.navbar.justify-content-end
-      li.nav-item
-        a.nav-link.active(href='#') Active
-      li.nav-item
-        a.nav-link(href='#') Link
-      li.nav-item
-        a.nav-link(href='#') Link
+    nav.navbar.navbar-expand-lg.navbar-dark.bg-dark
+      a.navbar-brand(href='/') NodeKnowledgeBase
+      button.navbar-toggler(type='button' data-toggle='collapse' data-target='#navbarNavDropdown' aria-controls='navbarNavDropdown' aria-expanded='false' aria-label='Toggle navigation')
+        span.navbar-toggler-icon
+      #navbarNavDropdown.collapse.navbar-collapse
+        ul.nav.navbar-nav
+          li.nav-item
+            a.nav-link.active(href='/') Home
+          li.nav-item
+            a.nav-link(href='/articles/add') Add Article
+          li.nav-item
+            a.nav-link(href='#') Link
     .container
       block content
       br
       hr
       footer
         p Copyright &copy 2018
+    script(src='https://code.jquery.com/jquery-3.3.1.min.js')
+    script(src='/bower_components/bootstrap/dist/js/bootstrap.js')
