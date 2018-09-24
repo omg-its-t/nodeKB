@@ -94,6 +94,38 @@ app.get('/article/:id', function(req, res){
   });
 });
 
+//edit single article
+app.get('/article/edit/:id', function(req, res){
+  Article.findById(req.params.id, function(err, article){
+    res.render('edit_article',{
+      title:'Edit Article',
+      article:article
+    });
+  });
+});
+
+//update POST route (simular to add article route)
+app.post('/articles/edit/:id', function(req, res){
+  let article = {};
+  article.title = req.body.title;
+  article.author = req.body.author;
+  article.body = req.body.body;
+
+  //need to specify what article to update
+  let query = {_id:req.params.id}
+
+  //using the model, hence the capital A
+  //                    data
+  Article.update(query, article, function(err){
+    if(err){
+      res.redirect('/error',{
+      });
+    }else{
+      res.redirect('/');
+    }
+  });
+});
+
 //server start
 app.listen(3000, function(){
   console.log('Server running, ready for take off sir.');
