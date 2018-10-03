@@ -18,6 +18,7 @@ html
           li.nav-item
             a.nav-link(href='#') Link
     .container
+      != messages('my_message_template', locals)
       block content
       br
       hr

@@ -3,6 +3,9 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const session = require('express-session');
+const flash = require('connect-flash');
+const expressValidator = require('express-validator');
 
 //using useNewUrlParser to avoid deprecation warning
 mongoose.connect('mongodb://localhost/nodekb', { useNewUrlParser: true });
@@ -35,6 +38,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 // parse application/json
 app.use(bodyParser.json());
 
+//express session middleware
+app.use(session({
+  secret: 'super secret squirrel',
+  resave: true,
+  saveUninitialized: true,
+}));
+
+//express messages middleware
+app.use(require('connect-flash')());
+app.use(function (req, res, next) {
+  res.locals.messages = require('express-messages')(req, res);
+  next();
+});
 
 //error route
 app.get('/error', function(req, res){
@@ -80,6 +96,7 @@ app.post('/articles/add', function(req, res){
       res.redirect('/error',{
       });
     }else{
+      req.flash('success', 'Article Added');
       res.redirect('/');
     }
   });
