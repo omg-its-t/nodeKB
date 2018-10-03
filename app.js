@@ -138,6 +138,7 @@ app.post('/articles/edit/:id', function(req, res){
       res.redirect('/error',{
       });
     }else{
+      req.flash('success', 'Article Updated');
       res.redirect('/');
     }
   });
