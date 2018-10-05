@@ -1,19 +1,22 @@
-const express = require('express');
-const router = express.router();
-
 // when bringing all these routes over from app.js
 // we need to change app.xxxx to router.xxxx
 
+const express = require('express');
+const router = express.Router();
+
+//bring in Article model
+let Article = require('../models/article');
+
 
 //add article route
-router.get('/articles/add', function(req, res){
+router.get('/add', function(req, res){
   res.render('add_article',{
     title: 'Add Article'
   });
 });
 
 //submit POST route
-router.post('/articles/add', function(req, res){
+router.post('/add', function(req, res){
   req.checkBody('title', 'Title is required').notEmpty();
   req.checkBody('author', 'Author is required').notEmpty();
   req.checkBody('body', 'Body is required').notEmpty();
@@ -36,8 +39,8 @@ router.post('/articles/add', function(req, res){
 
     article.save(function(err){
       if(err){
-        res.redirect('/error',{
-        });
+        consol.log(err);
+        return;
       }else{
         req.flash('success', 'Article Added');
         res.redirect('/');
@@ -48,7 +51,7 @@ router.post('/articles/add', function(req, res){
 
 
 //get single article
-router.get('/article/:id', function(req, res){
+router.get('/:id', function(req, res){
   Article.findById(req.params.id, function(err, article){
     res.render('article',{
       article:article
@@ -57,7 +60,7 @@ router.get('/article/:id', function(req, res){
 });
 
 //edit single article
-router.get('/article/edit/:id', function(req, res){
+router.get('/edit/:id', function(req, res){
   Article.findById(req.params.id, function(err, article){
     res.render('edit_article',{
       title:'Edit Article',
@@ -67,7 +70,7 @@ router.get('/article/edit/:id', function(req, res){
 });
 
 //update POST route (simular to add article route)
-router.post('/articles/edit/:id', function(req, res){
+router.post('/edit/:id', function(req, res){
   let article = {};
   article.title = req.body.title;
   article.author = req.body.author;
@@ -80,8 +83,8 @@ router.post('/articles/edit/:id', function(req, res){
   //                    data
   Article.update(query, article, function(err){
     if(err){
-      res.redirect('/error',{
-      });
+      console.log(err);
+      return;
     }else{
       req.flash('success', 'Article Updated');
       res.redirect('/');
@@ -90,7 +93,7 @@ router.post('/articles/edit/:id', function(req, res){
 });
 
 //delete request
-router.delete('/article/:id', function(req, res){
+router.delete('/:id', function(req, res){
   let query = {_id:req.params.id}
 
   Article.remove(query, function(err){
@@ -100,3 +103,6 @@ router.delete('/article/:id', function(req, res){
     res.send("Success");
   });
 });
+
+// so we can access the route from outside
+module.exports = router;

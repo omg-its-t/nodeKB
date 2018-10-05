@@ -72,6 +72,11 @@ app.get('/', function(req, res){
   });
 });
 
+// any request that is /articles will go to this file (./routes/articles)
+// this will send an automatic /articles then go to the route in the folder
+let articles = require('./routes/articles');
+app.use('/articles', articles);
+
 //server start
 app.listen(3000, function(){
   console.log('Server running, ready for take off sir.');
