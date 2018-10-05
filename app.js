@@ -7,6 +7,8 @@ const session = require('express-session');
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
 
+
+
 //using useNewUrlParser to avoid deprecation warning
 mongoose.connect('mongodb://localhost/nodekb', { useNewUrlParser: true });
 let db = mongoose.connection;
@@ -23,6 +25,7 @@ db.on('error', function(err){
 
 //init app
 const app = express();
+app.use(expressValidator());
 
 //bring in models
 let Article = require('./models/article');
@@ -37,6 +40,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));
 // parse application/json
 app.use(bodyParser.json());
+
 
 //express session middleware
 app.use(session({
@@ -85,22 +89,38 @@ app.get('/articles/add', function(req, res){
 
 //submit POST route
 app.post('/articles/add', function(req, res){
-  //using the model we brought in (line 24)
-  let article = new Article();
-  article.title = req.body.title;
-  article.author = req.body.author;
-  article.body = req.body.body;
+  req.checkBody('title', 'Title is required').notEmpty();
+  req.checkBody('author', 'Author is required').notEmpty();
+  req.checkBody('body', 'Body is required').notEmpty();
 
-  article.save(function(err){
-    if(err){
-      res.redirect('/error',{
-      });
-    }else{
-      req.flash('success', 'Article Added');
-      res.redirect('/');
-    }
-  });
+  //get errors, and if there are errors,
+  //we will send them while rerendering the add adricle template
+  let errors = req.validationErrors();
+  if(errors){
+    res.render('add_article', {
+      title:'Add Article',
+      errors:errors
+    });
+    //once input is valiudated we will add to db
+  } else{
+    //using the model we brought in (line 24)
+    let article = new Article();
+    article.title = req.body.title;
+    article.author = req.body.author;
+    article.body = req.body.body;
+
+    article.save(function(err){
+      if(err){
+        res.redirect('/error',{
+        });
+      }else{
+        req.flash('success', 'Article Added');
+        res.redirect('/');
+      }
+    });
+  }
 });
+
 
 //get single article
 app.get('/article/:id', function(req, res){
