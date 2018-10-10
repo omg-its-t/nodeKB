@@ -72,10 +72,13 @@ app.get('/', function(req, res){
   });
 });
 
-// any request that is /articles will go to this file (./routes/articles)
-// this will send an automatic /articles then go to the route in the folder
+// any request that is /articles will go to these files (./routes/articles) or
+// (./routes/users)
+// this will send an automatic /articles or /users then go to the route in the folder
 let articles = require('./routes/articles');
+let users = require('./routes/users');
 app.use('/articles', articles);
+app.use('/users', users);
 
 //server start
 app.listen(3000, function(){
