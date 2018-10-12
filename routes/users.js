@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 //bring in User model
 let User = require('../models/users');
@@ -69,6 +70,15 @@ router.post('/register', function(req,res){
 //login route
 router.get('/login', function(req, res){
   res.render('login');
-})
+});
+
+//login process
+router.post('/login', function(req, res, next){
+  passport.authenticate('local', {
+    successRedirect: '/',
+    failureRedirect: '/users/login',
+    failureFlash: true
+  })(req, res, next);
+});
 // so we can access the route from outside
 module.exports = router;

@@ -6,11 +6,14 @@ const bodyParser = require('body-parser');
 const session = require('express-session');
 const flash = require('connect-flash');
 const expressValidator = require('express-validator');
+const passport = require('passport');
+const config = require('./config/database');
+
 
 
 
 //using useNewUrlParser to avoid deprecation warning
-mongoose.connect('mongodb://localhost/nodekb', { useNewUrlParser: true });
+mongoose.connect(config.database, { useNewUrlParser: true });
 let db = mongoose.connection;
 
 //check connection
@@ -55,6 +58,13 @@ app.use(function (req, res, next) {
   res.locals.messages = require('express-messages')(req, res);
   next();
 });
+
+//passport config
+require('./config/passport')(passport);
+//passport middleware
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 //home route
 app.get('/', function(req, res){

@@ -18,7 +18,8 @@ router.get('/add', function(req, res){
 //submit POST route
 router.post('/add', function(req, res){
   req.checkBody('title', 'Title is required').notEmpty();
-  req.checkBody('author', 'Author is required').notEmpty();
+  //no longer need, populating this from logged in user
+  //req.checkBody('author', 'Author is required').notEmpty();
   req.checkBody('body', 'Body is required').notEmpty();
 
   //get errors, and if there are errors,
@@ -34,7 +35,7 @@ router.post('/add', function(req, res){
     //using the model we brought in (line 24)
     let article = new Article();
     article.title = req.body.title;
-    article.author = req.body.author;
+    article.author = req.body.user._id;
     article.body = req.body.body;
 
     article.save(function(err){
