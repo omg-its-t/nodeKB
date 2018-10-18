@@ -7,9 +7,8 @@ const router = express.Router();
 //bring in Article model
 let Article = require('../models/article');
 
-
 //add article route
-router.get('/add', function(req, res){
+router.get('/add', ensureAuthenticated, function(req, res){
   res.render('add_article',{
     title: 'Add Article'
   });
@@ -35,7 +34,8 @@ router.post('/add', function(req, res){
     //using the model we brought in (line 24)
     let article = new Article();
     article.title = req.body.title;
-    article.author = req.body.user._id;
+    //this will put the logged in users id as author
+    article.author = req.user.name;
     article.body = req.body.body;
 
     article.save(function(err){
@@ -61,7 +61,7 @@ router.get('/:id', function(req, res){
 });
 
 //edit single article
-router.get('/edit/:id', function(req, res){
+router.get('/edit/:id', ensureAuthenticated, function(req, res){
   Article.findById(req.params.id, function(err, article){
     res.render('edit_article',{
       title:'Edit Article',
@@ -105,5 +105,16 @@ router.delete('/:id', function(req, res){
   });
 });
 
+//access control
+// we can add this function to any route to protect it
+// add as second param after route and before function
+function ensureAuthenticated(req, res, next){
+  if(req.isAuthenticated()){
+    return next();
+  }else{
+    req.flash('danger', "Please login first");
+    res.redirect('/users/login');
+  }
+};
 // so we can access the route from outside
 module.exports = router;
