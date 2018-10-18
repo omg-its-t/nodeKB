@@ -65,6 +65,12 @@ require('./config/passport')(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 
+//for all routes if user is logged in
+app.get('*', function(req, res, next){
+  res.locals.user = req.user || null;
+  next();
+});
+
 
 //home route
 app.get('/', function(req, res){

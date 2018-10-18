@@ -72,6 +72,7 @@ router.get('/login', function(req, res){
   res.render('login');
 });
 
+
 //login process
 router.post('/login', function(req, res, next){
   passport.authenticate('local', {
@@ -80,5 +81,12 @@ router.post('/login', function(req, res, next){
     failureFlash: true
   })(req, res, next);
 });
+
+router.get('/logout', function(req, res){
+  req.logout();
+  req.flash('success', 'You are logged out');
+  res.redirect('/users/login');
+});
+
 // so we can access the route from outside
 module.exports = router;
