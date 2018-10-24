@@ -6,6 +6,8 @@ const router = express.Router();
 
 //bring in Article model
 let Article = require('../models/article');
+//bring in user model
+let User = require('../models/users');
 
 //add article route
 router.get('/add', ensureAuthenticated, function(req, res){
@@ -35,7 +37,7 @@ router.post('/add', function(req, res){
     let article = new Article();
     article.title = req.body.title;
     //this will put the logged in users id as author
-    article.author = req.user.name;
+    article.author = req.user._id;
     article.body = req.body.body;
 
     article.save(function(err){
@@ -54,8 +56,13 @@ router.post('/add', function(req, res){
 //get single article
 router.get('/:id', function(req, res){
   Article.findById(req.params.id, function(err, article){
-    res.render('article',{
-      article:article
+    //extra query to find the user id of the author and return the name
+    User.findById(article.author, function(err, user){
+      res.render('article',{
+        article:article,
+        //sending the article and author to article.pug
+        author:user.name
+      });
     });
   });
 });
