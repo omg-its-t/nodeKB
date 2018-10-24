@@ -42,7 +42,7 @@ router.post('/add', function(req, res){
 
     article.save(function(err){
       if(err){
-        consol.log(err);
+        console.log(err);
         return;
       }else{
         req.flash('success', 'Article Added');
@@ -61,7 +61,7 @@ router.get('/:id', function(req, res){
       res.render('article',{
         article:article,
         //sending the article and author to article.pug
-        author:user.name
+        //author:user.name
       });
     });
   });
@@ -70,12 +70,17 @@ router.get('/:id', function(req, res){
 //edit single article
 router.get('/edit/:id', ensureAuthenticated, function(req, res){
   Article.findById(req.params.id, function(err, article){
-    res.render('edit_article',{
-      title:'Edit Article',
-      article:article
+    if(article.author != req.user._id){
+      req.flash('danger', "Not Authorized");
+      return res.redirect('/');
+    }else{
+      res.render('edit_article',{
+        title:'Edit Article',
+        article:article
+        });
+      };
     });
   });
-});
 
 //update POST route (simular to add article route)
 router.post('/edit/:id', function(req, res){

@@ -4,8 +4,10 @@ block content
   h1= article.title
   h5 Written by: #{author}
   p= article.body
-  hr
+  <!-- if user is logged in -->
   if user
+    <!-- if user is the author of this article -->
     if user.id == article.author
+      hr
       a.btn.btn-primary(href='/articles/edit/'+ article._id) Edit
       a.btn.btn-danger.delete-article(href='#',data-id=article._id ) Delete
