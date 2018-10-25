@@ -107,13 +107,24 @@ router.post('/edit/:id', function(req, res){
 
 //delete request
 router.delete('/:id', function(req, res){
-  let query = {_id:req.params.id}
+  //checks to make sure user is logged in be checking for an id
+  if(!req.user._id){
+    res.status(500).send();
+  }
 
-  Article.remove(query, function(err){
-    if(err){
-      console.log(err);
+  let query = {_id:req.params.id}
+  //checks to make sure the user making the request is the user who wrote it
+  article.findById(req.params.id, function(err, article){
+    if(article.author != req.user.id){
+      res.status(500).send();
+    } else {
+      Article.remove(query, function(err){
+        if(err){
+          console.log(err);
+        }
+        res.send("Success");
+      });
     }
-    res.send("Success");
   });
 });
 
