@@ -1,29 +1,35 @@
 doctype html
 html
   head
+    meta(name='viewport', content='width=device-width, initial-scale=1')
     title NodeKnowledgeBase
     link(rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.css')
     link(rel='stylesheet' href='/css/style.css')
+    link(rel='stylesheet', href='https://use.fontawesome.com/releases/v5.4.1/css/all.css', integrity='sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz', crossorigin='anonymous')
   body
     nav.navbar.navbar-expand-md.navbar-dark.bg-dark
       a.navbar-brand.mx-auto(href='/') NodeKnowledgeBase
       button.navbar-toggler(type='button', data-toggle='collapse', data-target='.dual-collapse2')
         span.navbar-toggler-icon
-      .navbar-collapse.collapse.w-100.order-1.order-md-0.dual-collapse2
-        ul.navbar-nav.mr-auto
+      .navbar-collapse.collapse.dual-collapse2
+        ul.navbar-nav.ml-auto
           if user
             li.nav-item
-              a.nav-link(href='/articles/add') Add Article
-        .navbar-collapse.collapse.w-100.order-3.dual-collapse2
+              a.nav-link(href='/articles/add') &nbsp;&nbsp;Add Article 
+                i.fas.fa-plus-circle
+        .navbar-collapse.collapse.dual-collapse2
           ul.navbar-nav.ml-auto
             if !user
               li.nav-item
-                a.nav-link(href='/users/register') Register
+                a.nav-link(href='/users/register') Register 
+                  i.fas.fa-user-plus
               li.nav-item
-                a.nav-link(href='/users/login') Login
+                a.nav-link(href='/users/login') Login 
+                  i.fas.fa-sign-in-alt 
             if user
               li.nav-item
-                a.nav-link(href='/users/logout') Logout
+                a.nav-link(href='/users/logout') Logout 
+                  i.fas.fa-sign-out-alt 
     .container
       br
       != messages('my_message_template', locals)
