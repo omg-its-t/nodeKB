@@ -61,7 +61,7 @@ router.get('/:id', function(req, res){
       res.render('article',{
         article:article,
         //sending the article and author to article.pug
-        //author:user.name
+        author:user.name
       });
     });
   });
@@ -86,7 +86,7 @@ router.get('/edit/:id', ensureAuthenticated, function(req, res){
 router.post('/edit/:id', function(req, res){
   let article = {};
   article.title = req.body.title;
-  article.author = req.body.author;
+  //article.author = req.body.author; removing from edit form, does not need to be edited.
   article.body = req.body.body;
 
   //need to specify what article to update
