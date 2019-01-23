@@ -50,3 +50,7 @@ color:#1abc9c;
 .list-group-item:hover{
   background-color: #ecf0f1;
 }
+
+.navbar-brand{
+  padding-right: 20px;
+}
